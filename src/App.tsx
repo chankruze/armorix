@@ -11,14 +11,20 @@ function App() {
       // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
       setGreetMsg(await invoke("greet", { name }));
     } else {
-      setGreetMsg("")
+      setGreetMsg("");
     }
   }
 
   return (
-    <main className="h-screen p-4 bg-red-300 flex flex-col items-center justify-center space-y-3">
-      <input type="text" onChange={(e) => setName(e.currentTarget.value)} placeholder="Enter a name..." />
-      <button className="p-3 bg-green-600 text-white" onClick={greet}>Test Button</button>
+    <main className="flex flex-col items-center justify-center space-y-3 bg-red-300 p-4 h-screen">
+      <input
+        type="text"
+        onChange={(e) => setName(e.currentTarget.value)}
+        placeholder="Enter a name..."
+      />
+      <button className="p-3 bg-green-600 text-white" onClick={greet}>
+        Test Button
+      </button>
       <p>{greetMsg}</p>
     </main>
   );
