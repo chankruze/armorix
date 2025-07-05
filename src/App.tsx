@@ -2,18 +2,18 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 
-function App() {
+const App = () => {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
-  async function greet() {
+  const greet = async () => {
     if (name.trim()) {
       // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
       setGreetMsg(await invoke("greet", { name }));
     } else {
       setGreetMsg("");
     }
-  }
+  };
 
   return (
     <main className="flex flex-col items-center justify-center space-y-3 bg-red-300 p-4 h-screen">
@@ -28,6 +28,6 @@ function App() {
       <p>{greetMsg}</p>
     </main>
   );
-}
+};
 
 export default App;
