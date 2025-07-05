@@ -10,3 +10,21 @@
 | Configuration              | Customize `tauri.conf.json`                | [Configuration](https://tauri.app/v1/guides/features/configuration/)       |
 | Updater                    | Auto-update support in Tauri               | [Updater](https://tauri.app/v1/guides/distribution/updater/)               |
 | CLI Commands               | List of Tauri CLI commands                 | [CLI](https://tauri.app/v1/guides/usage/cli/)                              |
+
+### 📂 Suggested folder & file structure
+
+```
+src-tauri/src/
+├── main.rs
+├── commands/
+│   ├── mod.rs
+│   ├── weapons.rs
+│   ├── db.rs
+│   └── lan.rs
+├── models/
+│   ├── mod.rs
+│   └── weapon.rs
+├── utils/
+│   ├── mod.rs
+│   └── qr.rs
+```

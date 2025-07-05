@@ -1,0 +1,8 @@
+max_width = 100
+hard_tabs = false
+tab_spaces = 2
+use_small_heuristics = "Max"
+fn_call_width = 80
+struct_lit_width = 50
+reorder_imports = true
+newline_style = "Unix"
