@@ -1,32 +1,75 @@
+mod app_state;
+mod commands;
 pub mod config;
+mod models;
+mod utils;
 
-use tauri::Emitter;
-
+use crate::app_state::AppState;
 use crate::config::AppConfig;
+use commands::*;
+use tauri::Emitter;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+  let state = init_state();
+
   tauri::Builder::default()
     .plugin(tauri_plugin_opener::init())
-    .invoke_handler(tauri::generate_handler![set_db_mode, get_db_mode,])
+    .manage(std::sync::Mutex::new(state))
+    .invoke_handler(tauri::generate_handler![
+      set_db_mode,
+      get_db_mode,
+      generate_random_weapons,
+      get_weapon_qr,
+      save_weapon_qr,
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
 
-#[tauri::command]
-fn set_db_mode(app_handle: tauri::AppHandle, mode: String) {
-  println!("set_db_mode invoked with value: {mode:?}");
+fn init_state() -> AppState {
+  let config = AppConfig::load();
+  let mode = config.db_mode.clone().unwrap_or_else(|| "offline".to_string());
+  // mongo
+  // connection mode
+  if mode == "online" {
+    // TODO: setup mongodb connection
+  }
 
-  let mut config = AppConfig::load();
-  config.db_mode = Some(mode.clone());
-  config.save();
+  AppState { db_mode: mode }
+}
+
+#[tauri::command]
+fn set_db_mode(
+  app_handle: tauri::AppHandle,
+  state: tauri::State<std::sync::Mutex<AppState>>,
+  mode: String,
+) {
+  {
+    let mut config = AppConfig::load();
+    config.db_mode = Some(mode.clone());
+    config.save();
+  }
+
+  {
+    let mut state = state.lock().unwrap();
+
+    // Disconnect previous connections if needed (optional cleanup)
+
+    state.db_mode = mode.clone();
+
+    if mode == "online" {
+      // TODO: setup mongodb connection
+    } else {
+      // state.mongo_client = None;
+    }
+  }
 
   app_handle.emit("db_mode_set_success", mode).unwrap();
 }
 
 #[tauri::command]
-fn get_db_mode() -> Option<String> {
-  let config = AppConfig::load();
-  println!("get_db_mode invoked: {:?}", config.db_mode);
-  config.db_mode
+fn get_db_mode(state: tauri::State<std::sync::Mutex<AppState>>) -> String {
+  let state = state.lock().unwrap();
+  state.db_mode.clone()
 }

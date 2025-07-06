@@ -46,7 +46,7 @@ export default function SplashScreen() {
         clearInterval(interval);
       }
       setProgress(current);
-    }, 1000);
+    }, 250);
 
     return interval;
   };

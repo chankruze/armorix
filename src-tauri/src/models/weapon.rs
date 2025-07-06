@@ -1,11 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Weapon {
   pub id: String,
   pub name: String,
-  pub serial: String,
-  pub caliber: Option<String>,
-  pub owner: Option<String>,
-  pub description: Option<String>,
+  #[serde(rename = "type")]
+  pub weapon_type: String,
+  pub image: String,
+  pub price: String,
+  pub quality: String,
+  pub description: String,
 }
