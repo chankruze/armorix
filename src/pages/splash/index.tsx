@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import ConnectionMode from "./ConnectionMode";
+import BlockedProgressIndicator from "./BlockedProgressIndicator";
 
 export default function SplashScreen() {
   const navigate = useNavigate();
@@ -13,11 +14,13 @@ export default function SplashScreen() {
   const openConnectionModeModal = () => setIsConnectionModeModalOpen(true);
 
   useEffect(() => {
+    let loadingIntervalId: NodeJS.Timeout;
+
     invoke<string | null>("get_db_mode").then((mode) => {
       console.log("get_db_mode response:", mode);
 
       if (mode) {
-        simulateLoading();
+        loadingIntervalId = simulateLoading();
       } else {
         openConnectionModeModal();
       }
@@ -25,11 +28,12 @@ export default function SplashScreen() {
 
     const _listener = listen<string>("db_mode_set_success", (event) => {
       console.log("DB mode set successfully:", event.payload);
-      simulateLoading();
+      loadingIntervalId = simulateLoading();
     });
 
     return () => {
       _listener.then((f) => f());
+      clearInterval(loadingIntervalId);
     };
   }, []);
 
@@ -40,10 +44,11 @@ export default function SplashScreen() {
       if (current >= 100) {
         current = 100;
         clearInterval(interval);
-        navigate("/dashboard");
       }
       setProgress(current);
-    }, 350);
+    }, 1000);
+
+    return interval;
   };
 
   return (
@@ -53,14 +58,11 @@ export default function SplashScreen() {
       <h1 className="mt-8 text-3xl font-bold tracking-widest uppercase animate-pulse">
         Initializing System
       </h1>
-      <p className="mt-2 text-green-500 text-sm tracking-wider">
-        Loading inventory... {progress}%
-      </p>
-      <div className="w-full max-w-md mt-4 bg-green-800 rounded-full h-3 overflow-hidden">
-        <div
-          className="bg-green-400 h-full transition-all duration-200"
-          style={{ width: `${progress}%` }}
-        ></div>
+      <div className="absolute bottom-0 right-0 p-[5vw]">
+        <BlockedProgressIndicator
+          progress={progress}
+          onComplete={() => navigate("/dashboard")}
+        />
       </div>
       <ConnectionMode
         open={isConnectionModeModalOpen}
