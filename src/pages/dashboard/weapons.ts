@@ -1,6 +1,6 @@
 export const weapons = [
   {
-    id: 1,
+    id: "DRDO-M4A1-2025-1A45",
     name: "M4A1 Rifle",
     type: "Assault Rifle",
     image: "https://fnamerica.com/wp-content/uploads/2016/11/FN_M4A1_Rotators_1-1200x500.png",
@@ -9,7 +9,7 @@ export const weapons = [
     aspect: "16/9",
   },
   {
-    id: 2,
+    id: "DRDO-GLK19-2025-1BFD",
     name: "Glock 19",
     type: "Handgun",
     image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Glock_19_Generation_4-removebg.png",
@@ -18,7 +18,7 @@ export const weapons = [
     aspect: "4/3",
   },
   {
-    id: 3,
+    id: "DRDO-AK47-2025-1BFD",
     name: "AK-47",
     type: "Assault Rifle",
     image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/AK-47.png/500px-AK-47.png",

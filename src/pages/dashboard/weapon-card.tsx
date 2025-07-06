@@ -1,3 +1,11 @@
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { QrCode } from "lucide-react";
+
 interface WeaponCardProps {
   id: string | number;
   name: string;
@@ -18,7 +26,7 @@ export default function WeaponCard({
   onViewDetails,
 }: WeaponCardProps) {
   return (
-    <div className="relative bg-neutral-900 overflow-hidden">
+    <div className="relative bg-neutral-900 overflow-hidden group">
       <>
         <div className="absolute top-0 left-0 h-12 w-[1px] bg-neutral-700 z-10" />
         <div className="absolute top-0 left-0 h-[1px] w-12 bg-neutral-700 z-10" />
@@ -29,6 +37,19 @@ export default function WeaponCard({
         <div className="absolute bottom-0 right-0 h-12 w-[1px] bg-neutral-700 z-10" />
         <div className="absolute bottom-0 right-0 h-[1px] w-12 bg-neutral-700 z-10" />
       </>
+      <div className="flex items-center justify-between gap-4 px-4 py-3 text-neutral-500 group-hover:text-green-500">
+        <h2 className="text-sm uppercase font-mono selection:text-green-500">
+          {id}
+        </h2>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <QrCode className="transition-colors" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Show QR code</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
       <div className="h-64 flex flex-col justify-center px-[3vw] relative">
         <img src={image} alt={name} className="w-full h-full object-contain" />
       </div>
@@ -47,10 +68,10 @@ export default function WeaponCard({
         </div>
         <button
           onClick={() => onViewDetails?.(id)}
-          className="relative w-full border py-2 px-3 bg-transparent border-green-600 text-green-400 uppercase tracking-wide text-xs overflow-hidden group"
+          className="relative w-full border p-3 bg-transparent border-green-600 text-green-400 uppercase tracking-wide text-xs overflow-hidden group/button"
         >
           <span className="relative z-10">View Details</span>
-          <span className="absolute inset-0 bg-green-600/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out" />
+          <span className="absolute inset-0 bg-green-600/20 transform -translate-x-full group-hover/button:translate-x-0 transition-transform duration-300 ease-out" />
         </button>
       </div>
     </div>
