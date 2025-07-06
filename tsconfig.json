@@ -22,7 +22,13 @@
 
     /* React router */
     "rootDirs": [".", "./.react-router/types"],
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+
+    /* Shad-cn/ui */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", ".react-router/types/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
