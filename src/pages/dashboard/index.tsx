@@ -3,7 +3,8 @@ import WeaponCard from "./weapon-card";
 import { invoke } from "@tauri-apps/api/core";
 
 type Weapon = {
-  id: string;
+  _id: string;
+  serial: string;
   name: string;
   type: string;
   image: string;
@@ -12,14 +13,21 @@ type Weapon = {
   description: string;
 };
 
+async function loadWeapons() {
+  const args = {
+    collection: "weapons",
+    filter: {},
+  };
+
+  const weapons = await invoke<Weapon[]>("db_find", args);
+  console.log(weapons);
+  return weapons;
+}
 export default function Dashboard() {
   const [weapons, setWeapons] = useState<Weapon[]>([]);
 
   useEffect(() => {
-    invoke<Weapon[]>("generate_random_weapons").then((_weapons) => {
-      setWeapons(_weapons);
-      console.log(_weapons);
-    });
+    loadWeapons().then((_weapons) => setWeapons(_weapons));
   }, []);
 
   return (
@@ -28,8 +36,8 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {weapons.map((weapon) => (
           <WeaponCard
-            key={weapon.id}
-            id={weapon.id}
+            key={weapon._id}
+            serial={weapon.serial}
             name={weapon.name}
             type={weapon.type}
             quality={weapon.quality}

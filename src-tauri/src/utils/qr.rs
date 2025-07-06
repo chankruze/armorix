@@ -18,7 +18,12 @@ fn render_qr_image(data: &str) -> Result<ImageBuffer<Luma<u8>, Vec<u8>>, String>
 pub fn generate_weapon_qr_base64(weapon: &Weapon) -> Result<String, String> {
   let data = format!(
     "ID: {}\nName: {}\nType: {}\nPrice: {}\nQuality: {}\nDescription: {}",
-    weapon.id, weapon.name, weapon.weapon_type, weapon.price, weapon.quality, weapon.description,
+    weapon.serial,
+    weapon.name,
+    weapon.weapon_type,
+    weapon.price,
+    weapon.quality,
+    weapon.description.as_deref().unwrap_or("-"),
   );
 
   let image = render_qr_image(&data)?;
@@ -36,7 +41,12 @@ pub fn generate_weapon_qr_base64(weapon: &Weapon) -> Result<String, String> {
 pub fn save_weapon_qr_to_file(weapon: &Weapon, path: &Path) -> Result<(), String> {
   let data = format!(
     "ID: {}\nName: {}\nType: {}\nPrice: {}\nQuality: {}\nDescription: {}",
-    weapon.id, weapon.name, weapon.weapon_type, weapon.price, weapon.quality, weapon.description,
+    weapon.serial,
+    weapon.name,
+    weapon.weapon_type,
+    weapon.price,
+    weapon.quality,
+    weapon.description.as_deref().unwrap_or("-"),
   );
 
   let image = render_qr_image(&data)?;

@@ -7,16 +7,27 @@ mod utils;
 use crate::app_state::AppState;
 use crate::config::AppConfig;
 use commands::*;
+use mongodb::{options::ClientOptions, Client};
 use tauri::Emitter;
+
+fn init_mongodb_client() -> Client {
+  let config = AppConfig::load();
+  let uri = config.mongodb_uri.unwrap_or_else(|| "mongodb://localhost:27017/armorixdb".into());
+  let options = ClientOptions::parse(&uri).expect("invalid database url");
+  Client::with_options(options).expect("Failed to create MongoDB client")
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   let state = init_state();
+  let client = init_mongodb_client();
 
   tauri::Builder::default()
     .plugin(tauri_plugin_opener::init())
+    .manage(client)
     .manage(std::sync::Mutex::new(state))
     .invoke_handler(tauri::generate_handler![
+      db_find,
       set_db_mode,
       get_db_mode,
       generate_random_weapons,
@@ -30,10 +41,15 @@ pub fn run() {
 fn init_state() -> AppState {
   let config = AppConfig::load();
   let mode = config.db_mode.clone().unwrap_or_else(|| "offline".to_string());
-  // mongo
+
+  // let mut mongo_client = None;
+
   // connection mode
   if mode == "online" {
-    // TODO: setup mongodb connection
+    // let uri = config.mongodb_uri.unwrap_or_else(|| "mongodb://localhost:27017/armorixdb".into());
+    // let options = ClientOptions::parse(uri).expect("invalid database url");
+    // let client = Client::with_options(options).unwrap();
+    // mongo_client = Some(client);
   }
 
   AppState { db_mode: mode }
@@ -59,7 +75,12 @@ fn set_db_mode(
     state.db_mode = mode.clone();
 
     if mode == "online" {
-      // TODO: setup mongodb connection
+      // let uri = AppConfig::load()
+      //   .mongodb_uri
+      //   .unwrap_or_else(|| "mongodb://localhost:27017/armorixdb".into());
+      // let options = ClientOptions::parse(uri).expect("invalid database url");
+      // let client = Client::with_options(options).unwrap();
+      // state.mongo_client = Some(client);
     } else {
       // state.mongo_client = None;
     }

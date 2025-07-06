@@ -5,18 +5,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  ChevronRight,
-  Download,
-  MoreHorizontal,
-  MoveRight,
-  QrCode,
-  X,
-} from "lucide-react";
+import { Download, MoveRight, QrCode, X } from "lucide-react";
 import { invoke } from "@tauri-apps/api/core";
 
 interface WeaponCardProps {
-  id: string | number;
+  serial: string | number;
   name: string;
   type: string;
   quality: string;
@@ -26,7 +19,7 @@ interface WeaponCardProps {
 }
 
 export default function WeaponCard({
-  id,
+  serial,
   name,
   type,
   quality,
@@ -38,21 +31,13 @@ export default function WeaponCard({
   const [qr, setQr] = useState("");
 
   async function showQr() {
-    const _qr = await invoke("get_weapon_qr", {
-      id: "some-weapon-id",
-      mode: "offline",
-      host: null,
-    });
+    const _qr = await invoke("get_weapon_qr", { serial });
     console.log(_qr); // base64 image string
     setQr(_qr as string);
   }
 
   async function saveQr() {
-    const path = await invoke("save_weapon_qr", {
-      id: "some-weapon-id",
-      mode: "offline",
-      host: null,
-    });
+    const path = await invoke("save_weapon_qr", { serial });
     console.log(`QR saved to: ${path}`);
   }
 
@@ -96,7 +81,7 @@ export default function WeaponCard({
         >
           <div className="flex items-center justify-between gap-4 text-neutral-500 group-hover:text-green-500 transition-colors">
             <h2 className="text-sm uppercase font-mono selection:text-green-500">
-              {id}
+              {serial}
             </h2>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -131,7 +116,7 @@ export default function WeaponCard({
               </span>
             </div>
             <button
-              onClick={() => onViewDetails?.(id)}
+              onClick={() => onViewDetails?.(serial)}
               className="relative w-full border p-3 bg-transparent border-green-600 text-green-400 uppercase tracking-wide text-xs overflow-hidden group/button"
             >
               <span className="relative flex items-center justify-center gap-1">
@@ -154,7 +139,7 @@ export default function WeaponCard({
         >
           <div className="flex items-center justify-between gap-4 text-neutral-500 group-hover:text-green-500">
             <h2 className="text-sm uppercase font-mono selection:text-green-500">
-              {id}
+              {serial}
             </h2>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -172,7 +157,7 @@ export default function WeaponCard({
             <img
               // src={`https://api.qrserver.com/v1/create-qr-code/?data=WeaponID:${id}&size=150x150`}
               src={qr}
-              alt={`QR code for ${id}`}
+              alt={`QR code for ${serial}`}
               className="w-full"
             />
           </div>

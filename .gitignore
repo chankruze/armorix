@@ -54,3 +54,5 @@ debug.log
 TODO.md
 
 .react-router/
+build/
+dist/
