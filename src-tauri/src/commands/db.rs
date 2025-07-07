@@ -14,10 +14,10 @@ pub async fn db_find(
   let mut cursor = target_collection
     .find(filter, FindOptions::default())
     .await
-    .map_err(|e| format!("Find error: {}", e))?;
+    .map_err(|e| format!("Find error: {e}"))?;
 
   let mut results = Vec::new();
-  while let Some(result) = cursor.try_next().await.map_err(|e| format!("Cursor error: {}", e))? {
+  while let Some(result) = cursor.try_next().await.map_err(|e| format!("Cursor error: {e}"))? {
     results.push(result);
   }
 

@@ -35,7 +35,7 @@ pub fn generate_weapon_qr_base64(weapon: &Weapon) -> Result<String, String> {
     .map_err(|e| e.to_string())?;
 
   let encoded = general_purpose::STANDARD.encode(buffer.get_ref());
-  Ok(format!("data:image/png;base64,{}", encoded))
+  Ok(format!("data:image/png;base64,{encoded}"))
 }
 
 pub fn save_weapon_qr_to_file(weapon: &Weapon, path: &Path) -> Result<(), String> {

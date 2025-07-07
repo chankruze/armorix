@@ -8,11 +8,6 @@ use rand::prelude::IndexedRandom;
 use rand::{distr::Alphanumeric, rng, Rng};
 use tauri::{command, State};
 
-/// Generate a generic random string
-fn random_string(len: usize) -> String {
-  rng().sample_iter(&Alphanumeric).take(len).map(char::from).collect()
-}
-
 /// Generate a random serial number (uppercase)
 fn random_serial(len: usize) -> String {
   rng().sample_iter(&Alphanumeric).take(len).map(char::from).collect::<String>().to_uppercase()
@@ -21,7 +16,7 @@ fn random_serial(len: usize) -> String {
 /// Generate a custom weapon ID like DRDO-M4A1-ABC1234
 fn generate_weapon_id(weapon_code: &str) -> String {
   let serial = random_serial(7);
-  format!("DRDO-{}-{}", weapon_code, serial)
+  format!("DRDO-{weapon_code}-{serial}")
 }
 
 /// Get random weapon type
@@ -93,11 +88,6 @@ fn random_weapons_list() -> Vec<Weapon> {
 pub async fn generate_random_weapons() -> Vec<Weapon> {
   random_weapons_list()
 }
-
-/// Dummy fetch function returning random weapon (can be improved to search by id later)
-// pub async fn get_weapon(_id: String) -> Result<Weapon, String> {
-//   Ok(random_weapon())
-// }
 
 /// Helper function to fetch a weapon by ID using `db_find`
 async fn get_weapon(serial: String, client: State<'_, Client>) -> Result<Weapon, String> {

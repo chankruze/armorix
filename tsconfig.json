@@ -20,16 +20,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* React router */
-    "rootDirs": [".", "./.react-router/types"],
-    "verbatimModuleSyntax": true,
-
     /* Shad-cn/ui */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", ".react-router/types/**/*"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
