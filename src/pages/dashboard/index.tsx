@@ -1,28 +1,8 @@
 import { useEffect, useState } from "react";
 import WeaponCard from "./weapon-card";
-import { invoke } from "@tauri-apps/api/core";
+import { Weapon } from "@/types/weapon";
+import { loadWeapons } from "@/services/weapon-service";
 
-type Weapon = {
-  _id: string;
-  serial: string;
-  name: string;
-  type: string;
-  image: string;
-  price: string;
-  quality: string;
-  description: string;
-};
-
-async function loadWeapons() {
-  const args = {
-    collection: "weapons",
-    filter: {},
-  };
-
-  const weapons = await invoke<Weapon[]>("db_find", args);
-  console.log(weapons);
-  return weapons;
-}
 export default function Dashboard() {
   const [weapons, setWeapons] = useState<Weapon[]>([]);
 

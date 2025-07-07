@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Download, MoveRight, QrCode, X } from "lucide-react";
 import { invoke } from "@tauri-apps/api/core";
+import Image from "./image";
 
 interface WeaponCardProps {
   serial: string | number;
@@ -95,13 +96,7 @@ export default function WeaponCard({
               </TooltipContent>
             </Tooltip>
           </div>
-          <div className="flex flex-col justify-center relative">
-            <img
-              src={image}
-              alt={name}
-              className="w-full h-full object-contain"
-            />
-          </div>
+          <Image src={image} alt={name} />
           <div className="space-y-4 text-gray-200">
             <div>
               <h2 className="text-lg font-bold tracking-wide">{name}</h2>
