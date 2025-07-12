@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import WeaponCard from "./weapon-card";
+import WeaponCard from "./card";
 import { Weapon } from "@/types/weapon";
 import { loadWeapons } from "@/services/weapon-service";
 
-export default function Dashboard() {
+export default function Weapons() {
   const [weapons, setWeapons] = useState<Weapon[]>([]);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r bg-neutral-950 text-white p-6">
+    <div className="min-h-screen p-6">
       <h1 className="text-3xl font-bold mb-6">Weapon Inventory</h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {weapons.map((weapon) => (

@@ -4,6 +4,7 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import ConnectionMode from "./ConnectionMode";
 import BlockedProgressIndicator from "./BlockedProgressIndicator";
+import routes from "@/routes";
 
 export default function SplashScreen() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export default function SplashScreen() {
       <div className="absolute bottom-0 right-0 p-[5vw]">
         <BlockedProgressIndicator
           progress={progress}
-          onComplete={() => navigate("/dashboard")}
+          onComplete={() => navigate(routes.admin.dashboard)}
         />
       </div>
       <ConnectionMode

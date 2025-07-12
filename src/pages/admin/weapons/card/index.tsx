@@ -5,12 +5,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Download, MoveRight, QrCode, X } from "lucide-react";
-import { invoke } from "@tauri-apps/api/core";
+import { Download, Loader, MoveRight, QrCode, X } from "lucide-react";
 import Image from "./image";
+import { createQr, saveQr } from "@/utils/qr";
 
 interface WeaponCardProps {
-  serial: string | number;
+  serial: string;
   name: string;
   type: string;
   quality: string;
@@ -30,17 +30,19 @@ export default function WeaponCard({
 }: WeaponCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [qr, setQr] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function showQr() {
-    const _qr = await invoke("get_weapon_qr", { serial });
-    console.log(_qr); // base64 image string
-    setQr(_qr as string);
-  }
+  const showQr = async () => {
+    setIsLoading(true);
+    const _qr = await createQr(serial);
+    setIsLoading(false);
+    setQr(_qr);
+  };
 
-  async function saveQr() {
-    const path = await invoke("save_weapon_qr", { serial });
-    console.log(`QR saved to: ${path}`);
-  }
+  const downloadQr = async () => {
+    const path = await saveQr(serial);
+    console.log(`QR saved to: ${path}`); // TODO show toast
+  };
 
   useEffect(() => {
     if (flipped) showQr();
@@ -49,16 +51,16 @@ export default function WeaponCard({
   return (
     <div
       className={clsx(
-        "relative  overflow-hidden group w-full h-[500px]",
+        "relative overflow-hidden group w-full h-[500px]",
         "[perspective:1000px]",
       )}
     >
       {/* Border lines */}
       <>
-        <div className="absolute top-0 left-0 h-12 w-[1px] bg-neutral-700/60 z-10 group-hover:bg-green-600 transition-colors" />
-        <div className="absolute top-0 left-0 h-[1px] w-12 bg-neutral-700/60 z-10 group-hover:bg-green-600 transition-colors" />
-        <div className="absolute top-0 right-0 h-12 w-[1px] bg-neutral-700/60 z-10 group-hover:bg-green-600 transition-colors" />
-        <div className="absolute top-0 right-0 h-[1px] w-12 bg-neutral-700/60 z-10 group-hover:bg-green-600 transition-colors" />
+        <div className="absolute top-0 left-0 h-12 w-[1px] bg-neutral-800/80 z-10 group-hover:bg-green-600 transition-colors" />
+        <div className="absolute top-0 left-0 h-[1px] w-12 bg-neutral-800/80 z-10 group-hover:bg-green-600 transition-colors" />
+        <div className="absolute top-0 right-0 h-12 w-[1px] bg-transparent z-10 group-hover:bg-green-600 transition-colors" />
+        <div className="absolute top-0 right-0 h-[1px] w-12 bg-transparent z-10 group-hover:bg-green-600 transition-colors" />
         {/* <div className="absolute bottom-0 left-0 h-12 w-[1px] bg-neutral-700 z-10 group-hover:bg-green-600 transition-colors duration-750" />
         <div className="absolute bottom-0 left-0 h-[1px] w-12 bg-neutral-700 z-10 group-hover:bg-green-600 transition-colors duration-750" />
         <div className="absolute bottom-0 right-0 h-12 w-[1px] bg-neutral-700 z-10 group-hover:bg-green-600 transition-colors duration-1000" />
@@ -132,7 +134,7 @@ export default function WeaponCard({
             "bg-neutral-900",
           )}
         >
-          <div className="flex items-center justify-between gap-4 text-neutral-500 group-hover:text-green-500">
+          <div className="flex items-center justify-between gap-4 text-neutral-500 group-hover:text-green-500 transition-colors">
             <h2 className="text-sm uppercase font-mono selection:text-green-500">
               {serial}
             </h2>
@@ -148,16 +150,15 @@ export default function WeaponCard({
               </TooltipContent>
             </Tooltip>
           </div>
-          <div className="flex-1 flex items-center">
-            <img
-              // src={`https://api.qrserver.com/v1/create-qr-code/?data=WeaponID:${id}&size=150x150`}
-              src={qr}
-              alt={`QR code for ${serial}`}
-              className="w-full"
-            />
+          <div className="flex-1 flex items-center justify-center">
+            {isLoading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <img src={qr} alt={`QR code for ${serial}`} className="w-full" />
+            )}
           </div>
           <button
-            onClick={saveQr}
+            onClick={downloadQr}
             className="relative w-full border p-3 bg-transparent border-green-600 text-green-400 uppercase tracking-wide text-xs overflow-hidden group/button"
           >
             <span className="relative flex items-center justify-center gap-1">
