@@ -62,6 +62,7 @@ export default function NewWeapon() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<WeaponFormValues>({
     resolver: zodResolver(weaponSchema),
@@ -112,8 +113,8 @@ export default function NewWeapon() {
         className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6 rounded-lg shadow-lg"
       >
         {/* Serial */}
-        <div>
-          <Label className="block mb-1 font-semibold">Serial</Label>
+        <div className="space-y-2">
+          <Label>Serial</Label>
           <Input
             {...register("serial")}
             placeholder="WPN-001"
@@ -128,13 +129,13 @@ export default function NewWeapon() {
         </div>
 
         {/* Name */}
-        <div>
-          <Label className="block mb-1 font-semibold">Name</Label>
+        <div className="space-y-2">
+          <Label>Name</Label>
           <Input
             {...register("name")}
             placeholder="M4A1"
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.name && "border-red-500",
             )}
           />
@@ -142,13 +143,13 @@ export default function NewWeapon() {
         </div>
 
         {/* Type */}
-        <div>
-          <Label className="block mb-1 font-semibold">Type</Label>
+        <div className="space-y-2">
+          <Label>Type</Label>
           <Input
             {...register("type")}
             placeholder="Assault Rifle"
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.type && "border-red-500",
             )}
           />
@@ -156,13 +157,13 @@ export default function NewWeapon() {
         </div>
 
         {/* Image */}
-        <div>
-          <Label className="block mb-1 font-semibold">Image URL</Label>
+        <div className="space-y-2">
+          <Label>Image URL</Label>
           <Input
             {...register("image")}
             placeholder="https://example.com/image.jpg"
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.image && "border-red-500",
             )}
           />
@@ -172,13 +173,13 @@ export default function NewWeapon() {
         </div>
 
         {/* Price */}
-        <div>
-          <Label className="block mb-1 font-semibold">Price</Label>
+        <div className="space-y-2">
+          <Label>Price</Label>
           <Input
             {...register("price")}
             placeholder="$1200"
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.price && "border-red-500",
             )}
           />
@@ -188,26 +189,24 @@ export default function NewWeapon() {
         </div>
 
         {/* Qualities */}
-        <div>
-          <Label className="block mb-1 font-semibold">
-            Qualities (comma-separated)
-          </Label>
+        <div className="space-y-2">
+          <Label>Qualities (comma-separated)</Label>
           <Input
             {...register("qualities")}
             placeholder="Lightweight, Durable"
-            className="w-full px-3 py-2 border-neutral-700"
+            className="border-neutral-700"
           />
         </div>
 
         {/* Description */}
-        <div className="md:col-span-2">
-          <Label className="block mb-1 font-semibold">Description</Label>
+        <div className="md:col-span-2 space-y-2">
+          <Label>Description</Label>
           <Textarea
             {...register("description")}
             placeholder="Advanced combat rifle used in multiple military operations."
             rows={3}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700 border-neutral-700",
+              "border-neutral-700",
               errors.description && "border-red-500",
             )}
           />
@@ -217,8 +216,8 @@ export default function NewWeapon() {
         </div>
 
         {/* Stats */}
-        <div>
-          <Label className="block mb-1 font-semibold">Damage</Label>
+        <div className="space-y-2">
+          <Label>Damage</Label>
           <Input
             type="number"
             {...register("stats.damage", { valueAsNumber: true })}
@@ -226,7 +225,7 @@ export default function NewWeapon() {
             min={0}
             max={100}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.stats?.damage && "border-red-500",
             )}
           />
@@ -235,8 +234,8 @@ export default function NewWeapon() {
           )}
         </div>
 
-        <div>
-          <Label className="block mb-1 font-semibold">Accuracy</Label>
+        <div className="space-y-2">
+          <Label>Accuracy</Label>
           <Input
             type="number"
             {...register("stats.accuracy", { valueAsNumber: true })}
@@ -244,7 +243,7 @@ export default function NewWeapon() {
             min={0}
             max={100}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.stats?.accuracy && "border-red-500",
             )}
           />
@@ -253,8 +252,8 @@ export default function NewWeapon() {
           )}
         </div>
 
-        <div>
-          <Label className="block mb-1 font-semibold">Fire Rate</Label>
+        <div className="space-y-2">
+          <Label>Fire Rate</Label>
           <Input
             type="number"
             {...register("stats.fireRate", { valueAsNumber: true })}
@@ -262,7 +261,7 @@ export default function NewWeapon() {
             min={0}
             max={100}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.stats?.fireRate && "border-red-500",
             )}
           />
@@ -271,8 +270,8 @@ export default function NewWeapon() {
           )}
         </div>
 
-        <div>
-          <Label className="block mb-1 font-semibold">Mobility</Label>
+        <div className="space-y-2">
+          <Label>Mobility</Label>
           <Input
             type="number"
             {...register("stats.mobility", { valueAsNumber: true })}
@@ -280,7 +279,7 @@ export default function NewWeapon() {
             min={0}
             max={100}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.stats?.mobility && "border-red-500",
             )}
           />
@@ -289,8 +288,8 @@ export default function NewWeapon() {
           )}
         </div>
 
-        <div>
-          <Label className="block mb-1 font-semibold">Range</Label>
+        <div className="space-y-2">
+          <Label>Range</Label>
           <Input
             type="number"
             {...register("stats.range", { valueAsNumber: true })}
@@ -298,7 +297,7 @@ export default function NewWeapon() {
             min={0}
             max={100}
             className={clsx(
-              "w-full px-3 py-2 border-neutral-700",
+              "border-neutral-700",
               errors.stats?.range && "border-red-500",
             )}
           />
@@ -308,14 +307,12 @@ export default function NewWeapon() {
         </div>
 
         {/* Attachments */}
-        <div className="md:col-span-2">
-          <Label className="block mb-1 font-semibold">
-            Attachments (comma-separated)
-          </Label>
+        <div className="md:col-span-2 space-y-2">
+          <Label>Attachments (comma-separated)</Label>
           <Input
             {...register("attachments")}
             placeholder="Scope, Laser Sight, Extended Mag"
-            className="w-full px-3 py-2 border-neutral-700"
+            className="border-neutral-700"
           />
         </div>
       </form>
