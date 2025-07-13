@@ -30,3 +30,30 @@ export async function insertWeapon(weapon: Omit<Weapon, "_id">): Promise<string>
 
   return insertedId;
 }
+
+export async function updateWeapon(id: string, updateData: Partial<Omit<Weapon, "_id">>): Promise<number> {
+  const collection = "weapons";
+
+  const update = {
+    $set: updateData,
+  };
+
+  const modifiedCount = await invoke<number>("db_update_one", {
+    collection,
+    filter: { _id: { $oid: id } },
+    update,
+  });
+
+  return modifiedCount;
+}
+
+export async function deleteWeapon(id: string): Promise<number> {
+  const collection = "weapons";
+
+  const deletedCount = await invoke<number>("db_delete_one", {
+    collection,
+    filter: { _id: { $oid: id } },
+  });
+
+  return deletedCount;
+}

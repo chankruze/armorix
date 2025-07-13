@@ -2,15 +2,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import clsx from "clsx";
-import { insertWeapon } from "@/services/weapon-service";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import routes from "@/routes";
-import { Weapon } from "@/types/weapon";
-import { useHeader } from "@/contexts/header-context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { loadWeapon, updateWeapon } from "@/services/weapon-service";
 
 const weaponSchema = z.object({
   serial: z.string().min(1, "Serial is required"),
@@ -32,82 +30,83 @@ const weaponSchema = z.object({
 
 type WeaponFormValues = z.infer<typeof weaponSchema>;
 
-async function createWeapon(
-  values: WeaponFormValues,
-  onSuccess: (newWeaponId: string) => void,
-) {
-  const weapon: Omit<Weapon, "_id"> = {
-    ...values,
-    qualities: values.qualities
-      ? values.qualities.split(",").map((q) => q.trim())
-      : [],
-    attachments: values.attachments
-      ? values.attachments.split(",").map((a) => a.trim())
-      : [],
-  };
-
-  try {
-    const newWeaponId = await insertWeapon(weapon);
-    console.log("Weapon created with ID:", newWeaponId);
-    onSuccess(newWeaponId);
-  } catch (error) {
-    console.error("Failed to create weapon:", error);
-  }
-}
-
-export default function NewWeapon() {
+export default function EditWeapon() {
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { setHeaderProps } = useHeader();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<WeaponFormValues>({
     resolver: zodResolver(weaponSchema),
-    defaultValues: {
-      serial: "WPN-TEST-001",
-      name: "M4A1 Test",
-      type: "Assault Rifle",
-      image: "https://example.com/weapon.png",
-      price: "1500",
-      qualities: "Lightweight, Reliable, Low Recoil",
-      description:
-        "Test weapon for quick form submission. Used in modern combat scenarios.",
-      stats: {
-        damage: 75,
-        accuracy: 85,
-        fireRate: 90,
-        mobility: 70,
-        range: 60,
-      },
-      attachments: "Scope, Laser Sight, Extended Mag",
-    },
   });
 
   const onSubmit = async (data: WeaponFormValues) => {
-    await createWeapon(data, (newWeaponId) => {
-      navigate(routes.admin.weapons.weapon.index.path(newWeaponId));
-    });
+    const updatedWeapon = {
+      ...data,
+      qualities: data.qualities
+        ? data.qualities.split(",").map((q) => q.trim())
+        : [],
+      attachments: data.attachments
+        ? data.attachments.split(",").map((a) => a.trim())
+        : [],
+    };
+
+    try {
+      await updateWeapon(id!, updatedWeapon);
+      console.log("Weapon updated");
+      navigate(routes.admin.weapons.weapon.index.path(id!));
+    } catch (error) {
+      console.error("Failed to update weapon:", error);
+    }
   };
 
   useEffect(() => {
-    setHeaderProps({
-      title: "Add New Weapon",
-      showBack: true,
-      showSave: true,
-      showNew: false,
-      onSave: handleSubmit(onSubmit),
-    });
+    if (!id) return;
 
-    return () => {
-      setHeaderProps({});
+    const fetchWeapon = async () => {
+      try {
+        const weapon = await loadWeapon(id);
+
+        reset({
+          serial: weapon.serial,
+          name: weapon.name,
+          type: weapon.type,
+          image: weapon.image,
+          price: weapon.price,
+          qualities: weapon.qualities?.join(", "),
+          description: weapon.description,
+          stats: {
+            damage: weapon.stats.damage,
+            accuracy: weapon.stats.accuracy,
+            fireRate: weapon.stats.fireRate,
+            mobility: weapon.stats.mobility,
+            range: weapon.stats.range,
+          },
+          attachments: weapon.attachments?.join(", "),
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to load weapon:", error);
+        setLoading(false);
+      }
     };
-  }, []);
+
+    fetchWeapon();
+  }, [id, reset]);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading weapon data...</div>;
+  }
 
   return (
     <div className="p-6">
       <form
+        id="weapon-edit-form"
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6 rounded-lg shadow-lg"
       >

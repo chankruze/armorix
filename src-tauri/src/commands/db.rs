@@ -56,3 +56,34 @@ pub async fn db_insert_one(
 
   Ok(inserted_id)
 }
+
+#[tauri::command]
+pub async fn db_update_one(
+  client: State<'_, Client>,
+  collection: String,
+  filter: Document,
+  update: Document,
+) -> Result<u64, String> {
+  let db = client.default_database().ok_or("Default database not set")?;
+  let target_collection = db.collection::<Document>(&collection);
+
+  let result =
+    target_collection.update_one(filter, update).await.map_err(|e| format!("Update error: {e}"))?;
+
+  Ok(result.modified_count)
+}
+
+#[tauri::command]
+pub async fn db_delete_one(
+  client: State<'_, Client>,
+  collection: String,
+  filter: Document,
+) -> Result<u64, String> {
+  let db = client.default_database().ok_or("Default database not set")?;
+  let target_collection = db.collection::<Document>(&collection);
+
+  let result =
+    target_collection.delete_one(filter).await.map_err(|e| format!("Delete error: {e}"))?;
+
+  Ok(result.deleted_count)
+}

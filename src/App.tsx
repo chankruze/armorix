@@ -10,6 +10,7 @@ import {
   WeaponDetails,
   WeaponsLayout,
   NewWeapon,
+  EditWeaponDetails,
 } from "./pages/admin";
 import ErrorPage from "./pages/error";
 
@@ -39,6 +40,10 @@ const App = () => {
               <Route
                 path={routes.admin.weapons.weapon.index.template}
                 element={<WeaponDetails />}
+              />
+              <Route
+                path={routes.admin.weapons.weapon.edit.template}
+                element={<EditWeaponDetails />}
               />
             </Route>
           </Route>

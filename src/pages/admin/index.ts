@@ -6,6 +6,7 @@ import WeaponsIndex from "./weapons";
 import NewWeapon from "./weapons/new";
 import WeaponLayout from "./weapons/:id/layout"
 import WeaponDetails from "./weapons/:id"
+import EditWeaponDetails from "./weapons/:id/edit"
 
 export {
   RequireAuth,
@@ -15,5 +16,6 @@ export {
   WeaponsIndex,
   NewWeapon,
   WeaponLayout,
-  WeaponDetails
+  WeaponDetails,
+  EditWeaponDetails
 };

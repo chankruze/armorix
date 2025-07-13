@@ -38,6 +38,8 @@ pub async fn run() {
       db_find,
       db_find_one,
       db_insert_one,
+      db_update_one,
+      db_delete_one,
       set_db_mode,
       get_db_mode,
       generate_random_weapons,

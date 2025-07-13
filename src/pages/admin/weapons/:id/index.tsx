@@ -30,21 +30,31 @@ export default function WeaponDetails() {
             className="h-72 w-full object-contain md:h-80"
           />
         </div>
-        <div className="space-y-4">
+        <div className="md:col-span-2 space-y-4">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-3xl font-bold text-yellow-400">
+              <h2 className="text-3xl font-bold text-green-500">
                 {weapon.name}
               </h2>
               <p className="text-stone-400">{weapon.type}</p>
             </div>
-            <Badge variant="secondary">{weapon.serial}</Badge>
+            <Badge
+              variant="secondary"
+              className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
+            >
+              {weapon.serial}
+            </Badge>
           </div>
           {weapon.qualities && weapon.qualities.length > 0 ? (
             <div className="sm:col-span-2 space-y-4">
               <div className="flex flex-wrap gap-2">
                 {weapon.qualities.map((quality) => (
-                  <Badge variant="secondary">{quality}</Badge>
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
+                  >
+                    {quality}
+                  </Badge>
                 ))}
               </div>
               <p className="text-stone-300">{weapon.description}</p>
@@ -75,14 +85,14 @@ export default function WeaponDetails() {
         ) : null}
         {weapon.attachments && weapon.attachments.length > 0 ? (
           <div className="space-y-2">
-            <h4 className="text-lg font-semibold text-yellow-400 py-1 border-b border-neutral-800">
+            <h4 className="text-lg font-bold uppercase tracking-wider text-green-500 py-1 border-b border-green-700">
               Attachments
             </h4>
             <div className="flex flex-wrap gap-2">
               {weapon.attachments.map((attachment) => (
                 <Badge
                   key={attachment}
-                  className="bg-stone-800 text-stone-300 border-stone-600"
+                  className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
                 >
                   {attachment}
                 </Badge>
