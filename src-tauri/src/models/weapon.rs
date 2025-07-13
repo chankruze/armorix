@@ -11,6 +11,18 @@ pub struct Weapon {
   pub weapon_type: String,
   pub image: String,
   pub price: String,
-  pub quality: String,
-  pub description: Option<String>,
+  pub qualities: Option<Vec<String>>,
+  pub description: String,
+  pub stats: Stats,
+  pub attachments: Option<Vec<String>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Stats {
+  pub damage: i32,
+  pub accuracy: i32,
+  pub fire_rate: i32,
+  pub mobility: i32,
+  pub range: i32,
 }

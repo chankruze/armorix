@@ -1,26 +1,34 @@
 mod app_state;
 mod commands;
 pub mod config;
-mod models;
-mod utils;
+pub mod models;
+pub mod utils;
 
 use crate::app_state::AppState;
 use crate::config::AppConfig;
 use commands::*;
-use mongodb::{options::ClientOptions, Client};
+use mongodb::{bson::doc, Client};
+
 use tauri::Emitter;
 
-fn init_mongodb_client() -> Client {
+// pub fn init_mongodb_client() -> mongodb::error::Result<Client> {
+//   let config = AppConfig::load();
+//   let uri = config.mongodb_uri.unwrap_or_else(|| "mongodb://localhost:27017/armorixdb".into());
+//   let client = Client::with_uri_str(uri)?;
+//   Ok(client)
+// }
+
+pub async fn init_mongodb_client() -> mongodb::error::Result<Client> {
   let config = AppConfig::load();
   let uri = config.mongodb_uri.unwrap_or_else(|| "mongodb://localhost:27017/armorixdb".into());
-  let options = ClientOptions::parse(&uri).expect("invalid database url");
-  Client::with_options(options).expect("Failed to create MongoDB client")
+  let client = Client::with_uri_str(uri).await?;
+  Ok(client)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+pub async fn run() {
   let state = init_state();
-  let client = init_mongodb_client();
+  let client = init_mongodb_client().await.expect("Failed to init Mongo client");
 
   tauri::Builder::default()
     .plugin(tauri_plugin_opener::init())

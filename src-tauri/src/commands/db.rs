@@ -1,9 +1,5 @@
 use futures::TryStreamExt;
-use mongodb::{
-  bson::Document,
-  options::{FindOneOptions, FindOptions, InsertOneOptions},
-  Client,
-};
+use mongodb::{bson::Document, Client};
 use tauri::State;
 
 #[tauri::command]
@@ -15,10 +11,7 @@ pub async fn db_find(
   let db = client.default_database().ok_or("Default database not set")?;
   let target_collection = db.collection::<Document>(&collection);
 
-  let mut cursor = target_collection
-    .find(filter, FindOptions::default())
-    .await
-    .map_err(|e| format!("Find error: {e}"))?;
+  let mut cursor = target_collection.find(filter).await.map_err(|e| format!("Find error: {e}"))?;
 
   let mut results = Vec::new();
   while let Some(result) = cursor.try_next().await.map_err(|e| format!("Cursor error: {e}"))? {
@@ -37,10 +30,8 @@ pub async fn db_find_one(
   let db = client.default_database().ok_or("Default database not set")?;
   let target_collection = db.collection::<Document>(&collection);
 
-  let result = target_collection
-    .find_one(filter, FindOneOptions::default())
-    .await
-    .map_err(|e| format!("FindOne error: {e}"))?;
+  let result =
+    target_collection.find_one(filter).await.map_err(|e| format!("FindOne error: {e}"))?;
 
   Ok(result)
 }
@@ -54,10 +45,8 @@ pub async fn db_insert_one(
   let db = client.default_database().ok_or("Default database not set")?;
   let target_collection = db.collection::<Document>(&collection);
 
-  let result = target_collection
-    .insert_one(data, InsertOneOptions::default())
-    .await
-    .map_err(|e| format!("Insert error: {e}"))?;
+  let result =
+    target_collection.insert_one(data).await.map_err(|e| format!("Insert error: {e}"))?;
 
   let inserted_id = result
     .inserted_id
