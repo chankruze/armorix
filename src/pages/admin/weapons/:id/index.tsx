@@ -1,17 +1,31 @@
-import { useOutletContext } from "react-router";
-
+import { useNavigate, useOutletContext } from "react-router";
 import clsx from "clsx";
-
 import { Badge } from "@/components/ui/badge";
 import { Weapon } from "@/types/weapon";
 import weaponDetailsBg from "@/assets/weapon-details-bg.jpg";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { QRDialog } from "@/components/qr-dialog";
+import { deleteWeapon } from "@/services/weapon-service";
+import routes from "@/routes";
 
 interface ContextType {
   weapon: Weapon;
+  openDeleteDialog: boolean;
+  setOpenDeleteDialog: (open: boolean) => void;
+  openQrCodeDialog: boolean;
+  setOpenQrCodeDialog: (open: boolean) => void;
 }
 
 export default function WeaponDetails() {
-  const { weapon } = useOutletContext<ContextType>();
+  const {
+    weapon,
+    openDeleteDialog,
+    setOpenDeleteDialog,
+    openQrCodeDialog,
+    setOpenQrCodeDialog,
+  } = useOutletContext<ContextType>();
+
+  const navigate = useNavigate();
 
   return (
     <div className="relative p-6 h-full">
@@ -40,7 +54,7 @@ export default function WeaponDetails() {
             </div>
             <Badge
               variant="secondary"
-              className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
+              className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 hover:bg-green-700/70 transition-colors duration-200"
             >
               {weapon.serial}
             </Badge>
@@ -51,7 +65,7 @@ export default function WeaponDetails() {
                 {weapon.qualities.map((quality) => (
                   <Badge
                     variant="secondary"
-                    className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
+                    className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 hover:bg-green-700/70 transition-colors duration-200"
                   >
                     {quality}
                   </Badge>
@@ -66,7 +80,7 @@ export default function WeaponDetails() {
             {Object.entries(weapon.stats).map(([key, value]) => (
               <div
                 key={key}
-                className="flex flex-col items-center justify-center border border-slate-800 bg-slate-900/30 p-3 text-center shadow-sm hover:shadow-yellow-500/10 transition-all duration-200"
+                className="flex flex-col items-center justify-center border border-slate-800 bg-slate-900/30 p-3 text-center transition-all duration-200"
               >
                 <span className="text-xs uppercase text-neutral-500 tracking-wide">
                   {key}
@@ -92,7 +106,7 @@ export default function WeaponDetails() {
               {weapon.attachments.map((attachment) => (
                 <Badge
                   key={attachment}
-                  className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 shadow shadow-green-900 hover:bg-green-700/70 transition-colors duration-200"
+                  className="bg-green-800/60 text-green-200 border-green-600 px-3 py-1 hover:bg-green-700/70 transition-colors duration-200"
                 >
                   {attachment}
                 </Badge>
@@ -101,6 +115,37 @@ export default function WeaponDetails() {
           </div>
         ) : null}
       </div>
+      <ConfirmDialog
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        title={`Delete ${weapon.name}?`}
+        description="Are you sure you want to delete this weapon? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={() => {
+          console.log("Weapon deleted!");
+          setOpenDeleteDialog(false);
+        }}
+      />
+      <ConfirmDialog
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        title={`Delete ${weapon.name}?`}
+        description="Are you sure you want to delete this weapon? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={() => {
+          deleteWeapon(weapon._id.$oid).then(() => {
+            setOpenDeleteDialog(false);
+            navigate(routes.admin.weapons.index);
+          });
+        }}
+      />
+      <QRDialog
+        open={openQrCodeDialog}
+        onOpenChange={setOpenQrCodeDialog}
+        serial={weapon.serial}
+      />
     </div>
   );
 }

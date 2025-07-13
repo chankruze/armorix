@@ -1,13 +1,6 @@
 import { useNavigate, useLocation } from "react-router";
 import routes from "@/routes";
-import {
-  ChevronLeft,
-  Edit,
-  MoreHorizontal,
-  QrCode,
-  Trash,
-  Save,
-} from "lucide-react";
+import { ChevronLeft, Edit, QrCode, Trash, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -17,27 +10,31 @@ import {
 import type { Weapon } from "@/types/weapon";
 
 interface HeaderProps {
-  weapon?: Weapon;
+  weapon: Weapon;
+  setOpenDeleteDialog: (open: boolean) => void;
+  setOpenQrCodeDialog: (open: boolean) => void;
 }
 
-const Header = ({ weapon }: HeaderProps) => {
+const Header = ({
+  weapon,
+  setOpenDeleteDialog,
+  setOpenQrCodeDialog,
+}: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   if (!weapon) return null;
 
+  const isIndexpage = location.pathname.endsWith(weapon._id.$oid);
   const isEditPage = location.pathname.endsWith("/edit");
+  const back = isIndexpage
+    ? routes.admin.weapons.index
+    : routes.admin.weapons.weapon.index.path(weapon._id.$oid);
 
   return (
     <header className="grid grid-cols-2 items-center border-b border-stone-800 py-4 px-6">
       <div className="flex items-center gap-2">
-        <Button
-          onClick={() =>
-            navigate(routes.admin.weapons.weapon.index.path(weapon._id.$oid), {
-              replace: true,
-            })
-          }
-        >
+        <Button onClick={() => navigate(back, { replace: true })}>
           <ChevronLeft />
         </Button>
         <Tooltip>
@@ -52,7 +49,10 @@ const Header = ({ weapon }: HeaderProps) => {
       <div className="flex items-center justify-end gap-2">
         {!isEditPage ? (
           <>
-            <Button variant="destructive">
+            <Button
+              variant="destructive"
+              onClick={() => setOpenDeleteDialog(true)}
+            >
               <Trash />
               <p className="hidden md:block">Delete</p>
             </Button>
@@ -77,7 +77,7 @@ const Header = ({ weapon }: HeaderProps) => {
             <p className="hidden md:block">Save</p>
           </Button>
         )}
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={() => setOpenQrCodeDialog(true)}>
           <QrCode />
           <p className="hidden md:block">Show QR</p>
         </Button>

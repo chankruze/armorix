@@ -109,7 +109,7 @@ export default function NewWeapon() {
     <div className="p-6">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6 rounded-lg shadow-lg"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6"
       >
         {/* Serial */}
         <div className="space-y-2">

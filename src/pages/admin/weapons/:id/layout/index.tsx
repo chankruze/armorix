@@ -7,6 +7,8 @@ import type { Weapon } from "@/types/weapon";
 const Layout = () => {
   const [weapon, setWeapon] = useState<Weapon>();
   const [loading, setLoading] = useState(true);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openQrCodeDialog, setOpenQrCodeDialog] = useState(false);
 
   const { id } = useParams();
 
@@ -34,13 +36,25 @@ const Layout = () => {
       </div>
     );
 
-  console.log(weapon);
+  if (!weapon) return null;
 
   return (
     <>
-      <Header weapon={weapon} />
+      <Header
+        weapon={weapon}
+        setOpenDeleteDialog={setOpenDeleteDialog}
+        setOpenQrCodeDialog={setOpenQrCodeDialog}
+      />
       <div className="flex-1 overflow-hidden overflow-y-auto">
-        <Outlet context={{ weapon }} />
+        <Outlet
+          context={{
+            weapon,
+            openDeleteDialog,
+            setOpenDeleteDialog,
+            openQrCodeDialog,
+            setOpenQrCodeDialog,
+          }}
+        />
       </div>
     </>
   );

@@ -12,6 +12,8 @@ export interface HeaderContextProps {
   ) => void;
 }
 
-export const HeaderContext = createContext<HeaderContextProps>({});
+export const HeaderContext = createContext<HeaderContextProps>({
+  setHeaderProps: () => {},
+});
 
 export const useHeader = () => useContext(HeaderContext);
