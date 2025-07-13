@@ -43,9 +43,7 @@ const NavLink: React.FC<NavLinkProps> = ({
       {Icon && <Icon className="size-5" />}
       {isSidebarOpen && <span>{label}</span>}
     </div>
-    {isSidebarOpen && count !== undefined && (
-      <Badge variant="secondary">{count}</Badge>
-    )}
+    {isSidebarOpen && count !== undefined && <Badge>{count}</Badge>}
   </Link>
 );
 

@@ -51,42 +51,45 @@ export default function WeaponDetails() {
             </div>
           ) : null}
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          {Object.entries(weapon.stats).map(([key, value]) => (
-            <div
-              key={key}
-              className="flex flex-col items-center justify-center border border-slate-800 bg-slate-900/30 p-3 text-center shadow-sm hover:shadow-yellow-500/10 transition-all duration-200"
-            >
-              <span className="text-xs uppercase text-neutral-500 tracking-wide">
-                {key}
-              </span>
-              <span
-                className={clsx("text-2xl font-bold", {
-                  "text-green-400": value > 50,
-                  "text-red-400": value < 30,
-                })}
+        {weapon.stats ? (
+          <div className="grid grid-cols-2 gap-2">
+            {Object.entries(weapon.stats).map(([key, value]) => (
+              <div
+                key={key}
+                className="flex flex-col items-center justify-center border border-slate-800 bg-slate-900/30 p-3 text-center shadow-sm hover:shadow-yellow-500/10 transition-all duration-200"
               >
-                {value}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="space-y-2">
-          <h4 className="text-lg font-semibold text-yellow-400 py-1 border-b border-neutral-800">
-            Attachments
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {weapon.attachments.map((attachment) => (
-              <Badge
-                key={attachment}
-                className="bg-stone-800 text-stone-300 border-stone-600"
-              >
-                {attachment}
-              </Badge>
+                <span className="text-xs uppercase text-neutral-500 tracking-wide">
+                  {key}
+                </span>
+                <span
+                  className={clsx("text-2xl font-bold", {
+                    "text-green-400": value > 50,
+                    "text-red-400": value < 30,
+                  })}
+                >
+                  {value}
+                </span>
+              </div>
             ))}
           </div>
-        </div>
+        ) : null}
+        {weapon.attachments && weapon.attachments.length > 0 ? (
+          <div className="space-y-2">
+            <h4 className="text-lg font-semibold text-yellow-400 py-1 border-b border-neutral-800">
+              Attachments
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {weapon.attachments.map((attachment) => (
+                <Badge
+                  key={attachment}
+                  className="bg-stone-800 text-stone-300 border-stone-600"
+                >
+                  {attachment}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const Container: React.FC<ContainerProps> = ({ children, title, logo }) => {
       })}
     >
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center opacity-10"
+        className="absolute inset-0 z-0 bg-cover bg-center opacity-20"
         style={{
           backgroundImage: `url(${camouflage})`,
         }}

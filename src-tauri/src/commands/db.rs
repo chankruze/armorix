@@ -1,7 +1,7 @@
 use futures::TryStreamExt;
 use mongodb::{
   bson::Document,
-  options::{FindOneOptions, FindOptions},
+  options::{FindOneOptions, FindOptions, InsertOneOptions},
   Client,
 };
 use tauri::State;
@@ -43,4 +43,27 @@ pub async fn db_find_one(
     .map_err(|e| format!("FindOne error: {e}"))?;
 
   Ok(result)
+}
+
+#[tauri::command]
+pub async fn db_insert_one(
+  client: State<'_, Client>,
+  collection: String,
+  data: Document,
+) -> Result<String, String> {
+  let db = client.default_database().ok_or("Default database not set")?;
+  let target_collection = db.collection::<Document>(&collection);
+
+  let result = target_collection
+    .insert_one(data, InsertOneOptions::default())
+    .await
+    .map_err(|e| format!("Insert error: {e}"))?;
+
+  let inserted_id = result
+    .inserted_id
+    .as_object_id()
+    .map(|oid| oid.to_hex())
+    .unwrap_or_else(|| result.inserted_id.to_string());
+
+  Ok(inserted_id)
 }

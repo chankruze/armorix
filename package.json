@@ -13,6 +13,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-radio-group": "^1.3.7",
@@ -29,10 +30,12 @@
     "lucide-react": "^0.525.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.60.0",
     "react-router": "^7.6.3",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
-    "tailwindcss-glitch": "^0.2.6"
+    "tailwindcss-glitch": "^0.2.6",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

@@ -8,12 +8,13 @@ import {
 import { Download, Loader, MoveRight, QrCode, X } from "lucide-react";
 import Image from "./image";
 import { createQr, saveQr } from "@/utils/qr";
+import { Badge } from "@/components/ui/badge";
 
 interface WeaponCardProps {
   serial: string;
   name: string;
   type: string;
-  quality: string;
+  qualities?: string[];
   price: string;
   image: string;
   onViewDetails?: (id: string | number) => void;
@@ -23,8 +24,7 @@ export default function WeaponCard({
   serial,
   name,
   type,
-  quality,
-  price,
+  qualities,
   image,
   onViewDetails,
 }: WeaponCardProps) {
@@ -104,14 +104,13 @@ export default function WeaponCard({
               <h2 className="text-lg font-bold tracking-wide">{name}</h2>
               <p className="text-sm text-gray-500">{type}</p>
             </div>
-            <div className="flex justify-between items-center text-xs">
-              <span className="bg-red-600/20 text-red-400 px-2 py-1 uppercase tracking-wider border border-red-600">
-                {quality}
-              </span>
-              <span className="bg-blue-600/20 text-blue-400 px-2 py-1 uppercase tracking-wider border border-blue-600">
-                {price}
-              </span>
-            </div>
+            {qualities && qualities.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {qualities.map((quality) => (
+                  <Badge variant="secondary">{quality}</Badge>
+                ))}
+              </div>
+            ) : null}
             <button
               onClick={() => onViewDetails?.(serial)}
               className="relative w-full border p-3 bg-transparent border-green-600 text-green-400 uppercase tracking-wide text-xs overflow-hidden group/button"

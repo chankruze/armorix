@@ -8,6 +8,8 @@ import {
   WeaponsIndex,
   RequireAuth,
   WeaponDetails,
+  WeaponsLayout,
+  NewWeapon,
 } from "./pages/admin";
 import ErrorPage from "./pages/error";
 
@@ -22,8 +24,14 @@ const App = () => {
             <Route path={routes.admin.dashboard} element={<Dashboard />} />
             <Route
               path={routes.admin.weapons.index}
-              element={<WeaponsIndex />}
-            />
+              element={<WeaponsLayout />}
+            >
+              <Route
+                path={routes.admin.weapons.index}
+                element={<WeaponsIndex />}
+              />
+              <Route path={routes.admin.weapons.new} element={<NewWeapon />} />
+            </Route>
             <Route
               path={routes.admin.weapons.weapon.index.template}
               element={<WeaponLayout />}
