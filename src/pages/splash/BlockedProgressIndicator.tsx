@@ -24,7 +24,7 @@ export default function BlockedProgressIndicator({
   }, [progress, onComplete]);
 
   return (
-    <div className="bg-black text-green-500 w-full max-w-md font-mono mt-4 px-2">
+    <div className="relative text-green-500 w-full max-w-md font-mono">
       <div className="relative rounded p-2">
         <p className="text-sm text-green-400">{progress}%</p>
         <div className="flex gap-0.5 justify-center">

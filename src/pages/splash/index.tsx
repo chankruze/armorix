@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
+import routes from "@/routes";
 import ConnectionMode from "./ConnectionMode";
 import BlockedProgressIndicator from "./BlockedProgressIndicator";
-import routes from "@/routes";
+import systemSetup from "@/assets/system-setup.jpg";
 
 export default function SplashScreen() {
   const navigate = useNavigate();
@@ -53,7 +54,13 @@ export default function SplashScreen() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-black text-green-400 relative overflow-hidden px-4">
+    <div className="flex flex-col items-center justify-center h-screen bg-black/95 text-green-400 relative overflow-hidden">
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center opacity-20 animate-pulse"
+        style={{
+          backgroundImage: `url(${systemSetup})`,
+        }}
+      />
       <div className="absolute w-64 h-64 rounded-full border-4 border-green-400 animate-ping opacity-30"></div>
       <div className="absolute w-48 h-48 rounded-full border-2 border-green-400 animate-ping opacity-50"></div>
       <h1 className="mt-8 text-3xl font-bold tracking-widest uppercase animate-pulse">

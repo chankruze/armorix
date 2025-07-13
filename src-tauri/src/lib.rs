@@ -28,6 +28,7 @@ pub fn run() {
     .manage(std::sync::Mutex::new(state))
     .invoke_handler(tauri::generate_handler![
       db_find,
+      db_find_one,
       set_db_mode,
       get_db_mode,
       generate_random_weapons,

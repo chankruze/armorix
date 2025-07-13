@@ -34,13 +34,13 @@ const routes = {
     dashboard: "/admin/dashboard",
     weapons: {
       index: "/admin/weapons",
+      new: "/admin/weapons/new",
       weapon: {
         index: defineRoute("/admin/weapons/:id"),
+        edit: defineRoute("/admin/weapons/:id/edit"),
       }
     },
     weaponsWithStatus: (status: string) => `/admin/weapons?status=${status}`,
-    newWeapon: "/admin/weapons/new",
-    editWeapon: defineRoute("/admin/weapons/:weaponId"),
     settings: "/admin/settings",
   },
   public: {

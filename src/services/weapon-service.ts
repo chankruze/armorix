@@ -10,3 +10,12 @@ export async function loadWeapons(): Promise<Weapon[]> {
   const weapons = await invoke<Weapon[]>("db_find", args);
   return weapons;
 }
+
+export async function loadWeapon(id: string): Promise<Weapon> {
+  const args = {
+    collection: "weapons",
+    filter: { _id: { $oid: id, } },
+  };
+
+  return await invoke<Weapon>("db_find_one", args);
+}
