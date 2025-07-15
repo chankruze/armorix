@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import routes from "@/routes";
-import ConnectionMode from "./ConnectionMode";
-import BlockedProgressIndicator from "./BlockedProgressIndicator";
+import ConnectionMode from "./connection-mode";
+import BlockedProgressIndicator from "./blocked-progress-indicator";
 import systemSetup from "@/assets/system-setup.jpg";
 
 export default function SplashScreen() {
